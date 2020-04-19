@@ -1,0 +1,28 @@
+body {
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+}
+
+label {
+  display: block;
+}
+
+input {
+  font-size: 14px;
+  padding: 4px;
+  border: 1px solid lightslategray;
+  border-radius: 10px;
+}
+
+button {
+  margin-top: 10px;
+}
+
+section#error-section {
+  display: none;
+}
+
+p.error {
+  color: tomato;
+}

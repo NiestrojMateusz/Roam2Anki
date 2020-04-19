@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style></style>
+    <link rel="stylesheet" href="popup.css">
   </head>
   <body>
+    <label for="question-tag">Question Tag
+      <input id="question-tag" name="question-tag" type="text" placeholder="Box1"></input>
+    </label>
     <button id="generateCSV">Generate flashcards CSV</button>
+    <section id="error-section">
+      <p class="error error-message"></p>
+      <p class="error error-tip"></p>
+    </section>
   </body>
   <script src="popup.js"></script>
 </html>

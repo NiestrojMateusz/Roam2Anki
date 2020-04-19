@@ -1,25 +1,45 @@
+let tag;
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.message === 'clicked_browser_action') {
+    tag = request.tag;
     const csv = getFlashcardsCSV();
     sendResponse(csv);
   }
 });
 
-/**
- *
- */
+const sendError = (type, message = 'Something went wrong', tip = '') => {
+  chrome.runtime.sendMessage({
+    type,
+    data: {
+      message,
+      tip,
+    },
+  });
+};
 
 function getFlashcardsCSV() {
-  const questionTagedElements = document.querySelectorAll("[data-tag='Box1']");
+  const questionTagedElements = document.querySelectorAll(
+    `[data-tag='${tag}']`
+  );
 
-  const removeRoamLinks = (text) => {};
+  /**
+   * @description
+   *  The method to remove flashcard hastag and roam research biderictional links [[]]
+   * @param {string} str
+   */
+  const removeRoamLinks = (str) => {
+    return (str = str
+      .replace(`#${tag}`, '')
+      .replace(/\[+/gi, '')
+      .replace(/\]+/gi, '')
+      .trim());
+  };
 
   const getQestions = () => {
     return Array.from(questionTagedElements).map((e) => {
       const rawQuestions = e.parentNode.innerText;
-      // @todo add function to format roam linking to just text;
 
-      return rawQuestions;
+      return removeRoamLinks(rawQuestions);
     });
   };
 
@@ -51,15 +71,20 @@ function getFlashcardsCSV() {
     });
 
     const answerElements = getAnswersElements(questionsElements);
+    let answers = [];
 
-    const answers = answerElements.map((e) => {
-      if (!e.length) return;
-      if (e.length > 1) {
-        return getAnswerFromMultipleBlockAnswer(e);
+    for (let i = 0; i < answerElements.length; i++) {
+      const el = answerElements[i];
+      if (!el.length) {
+        answers = undefined;
+        break;
       }
-
-      return Array.from(e)[0].innerText;
-    });
+      if (el.length > 1) {
+        answers.push(getAnswerFromMultipleBlockAnswer(el));
+      } else {
+        answers.push(Array.from(el)[0].innerText);
+      }
+    }
     return answers;
   };
 
@@ -112,6 +137,15 @@ function getFlashcardsCSV() {
 
   const questions = getQestions();
   const answers = getAnswers();
+
+  if (!answers || !answers.length) {
+    sendError(
+      'no_answer_error',
+      'Answers not found',
+      'Make sure to extend Question blocks'
+    );
+    return;
+  }
 
   const qaCollection = makeQaPairs(questions, answers);
   const csv = generateCSV(qaCollection);
