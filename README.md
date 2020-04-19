@@ -39,6 +39,6 @@ In extension popup you could provide custom hashtag.
 
 Extension will generate CSV file only when all blocks that are marked with question hashtag are extended and has answer block.
 
-## Remarsk
+## Remarks
 
 The CSV fileds are separated by Tab by default.
