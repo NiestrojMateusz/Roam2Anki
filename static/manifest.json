@@ -1,0 +1,19 @@
+{
+  "manifest_version": 2,
+  "name": "Roam2Anki Extension",
+  "version": "0.1",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "browser_action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://roamresearch.com/*", "http://roamresearch.com/*"],
+      "js": ["content.js"]
+    }
+  ],
+  "permissions": ["downloads"]
+}

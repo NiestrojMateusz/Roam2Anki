@@ -4,5 +4,12 @@
   "description": "Chrome extension to make CSV for Anki flashcards from Roam Research blocks",
   "main": "index.js",
   "author": "Mateusz Niestrój <niestroj.mateusz@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "build": "parcel build src/background.js src/popup.html src/content.js src/popup.js"
+  },
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.3.1"
+  }
 }
